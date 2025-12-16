@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="DotNetTrainingDatabase/DotNetTrainingDatabase.csproj" />
+  <Project Path="DotNetTrainingWebApi/DotNetTrainingWebApi.csproj" />
+</Solution>
