@@ -1,0 +1,6 @@
+@DotNetTrainingMinimalApi_HostAddress = http://localhost:5233
+
+GET {{DotNetTrainingMinimalApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

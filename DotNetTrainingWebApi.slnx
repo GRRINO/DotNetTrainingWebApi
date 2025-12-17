@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="DotNetTrainingDatabase/DotNetTrainingDatabase.csproj" />
+  <Project Path="DotNetTrainingMinimalApi/DotNetTrainingMinimalApi.csproj" Id="2337f793-7c57-4e43-a513-951542821cd2" />
   <Project Path="DotNetTrainingWebApi/DotNetTrainingWebApi.csproj" />
 </Solution>
