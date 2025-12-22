@@ -1,6 +1,9 @@
 <Solution>
+  <Project Path="DotNetTrainingChartWebApp/DotNetTrainingChartWebApp.csproj" Id="decaa568-c5b0-4598-a18f-fc06ffbff0c0" />
   <Project Path="DotNetTrainingConvertJson/DotNetTrainingConvertJson.csproj" Id="e7a5fe0f-8cba-4595-a92e-3089c2450805" />
   <Project Path="DotNetTrainingDatabase/DotNetTrainingDatabase.csproj" />
+  <Project Path="DotNetTrainingHttpClient/DotNetTrainingHttpClient.csproj" Id="bce50046-c152-4b1c-a86c-435890db55fd" />
   <Project Path="DotNetTrainingMinimalApi/DotNetTrainingMinimalApi.csproj" Id="2337f793-7c57-4e43-a513-951542821cd2" />
+  <Project Path="DotNetTrainingMVC/DotNetTrainingMVC.csproj" Id="7a7f79c6-06ae-46ba-9500-eaa29b51c104" />
   <Project Path="DotNetTrainingWebApi/DotNetTrainingWebApi.csproj" />
 </Solution>
