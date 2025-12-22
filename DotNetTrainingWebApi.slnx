@@ -3,7 +3,10 @@
   <Project Path="DotNetTrainingConvertJson/DotNetTrainingConvertJson.csproj" Id="e7a5fe0f-8cba-4595-a92e-3089c2450805" />
   <Project Path="DotNetTrainingDatabase/DotNetTrainingDatabase.csproj" />
   <Project Path="DotNetTrainingHttpClient/DotNetTrainingHttpClient.csproj" Id="bce50046-c152-4b1c-a86c-435890db55fd" />
+  <Project Path="DotNetTrainingLog4Net/DotNetTrainingLog4Net.csproj" Id="46a3054c-7316-4008-b6fa-b420e60e7c4e" />
   <Project Path="DotNetTrainingMinimalApi/DotNetTrainingMinimalApi.csproj" Id="2337f793-7c57-4e43-a513-951542821cd2" />
   <Project Path="DotNetTrainingMVC/DotNetTrainingMVC.csproj" Id="7a7f79c6-06ae-46ba-9500-eaa29b51c104" />
+  <Project Path="DotNetTrainingNLog/DotNetTrainingNLog.csproj" Id="1134d069-775c-4fcc-9e64-7cf741fb38bd" />
+  <Project Path="DotNetTrainingSerilog/DotNetTrainingSerilog.csproj" Id="5540f1a4-4373-42a2-a473-652eff4ea232" />
   <Project Path="DotNetTrainingWebApi/DotNetTrainingWebApi.csproj" />
 </Solution>
