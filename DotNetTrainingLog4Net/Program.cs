@@ -3,7 +3,7 @@ using log4net.Config;
 
 namespace DotNetTrainingLog4Net
 {
-    internal class Program
+    public class Program
     {
         // Set up the logger
         private static readonly ILog log = LogManager.GetLogger(typeof(Program));
