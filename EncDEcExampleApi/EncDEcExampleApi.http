@@ -1,0 +1,6 @@
+@EncDEcExampleApi_HostAddress = http://localhost:5069
+
+GET {{EncDEcExampleApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
