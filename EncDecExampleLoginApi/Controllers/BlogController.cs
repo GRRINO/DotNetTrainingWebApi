@@ -57,9 +57,14 @@ namespace EncDecExampleLoginApi.Controllers
         {
             try
             {
-                var json = _encDecService.Decrypt(req.AccessToken);
+                var result = HttpContext.Request.Headers.TryGetValue("Authorization", out var accessToken);
+                if(!result)
+                {
+                    return Unauthorized("Access token is missing.");
+                }
+                var json = _encDecService.Decrypt(accessToken.ToString());
                 var user = JsonConvert.DeserializeObject<BlogLoginModel>(json);
-                if (user!.SessionExpired < DateTime.Now)
+                if (user!.SessionExpired > DateTime.Now)
                 {
                     return Unauthorized("Session is expired.");
                 }
@@ -68,7 +73,7 @@ namespace EncDecExampleLoginApi.Controllers
                 );
             } catch(Exception ex)
             {
-                return StatusCode(500, ex.ToString);
+                return StatusCode(500, ex.ToString());
             }
         }
         public static class UserData
@@ -84,7 +89,7 @@ namespace EncDecExampleLoginApi.Controllers
 
         public class UserListRequest
         {
-            public string AccessToken { get; set; }
+            public string ?AccessToken { get; set; }
         }
 
         public class BlogLoginModel
