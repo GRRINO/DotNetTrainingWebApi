@@ -1,6 +1,7 @@
 ﻿using EncDecExampleLoginApi.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 
 namespace EncDecExampleLoginApi.Controllers
@@ -76,6 +77,25 @@ namespace EncDecExampleLoginApi.Controllers
                 return StatusCode(500, ex.ToString());
             }
         }
+
+
+        [ServiceFilter(typeof(ValidationTokenActionFilter))]
+        [HttpPost("UserList2")]
+        public IActionResult UserList2(UserListRequest req)
+        {
+            try
+            {
+               
+               
+                return Ok(
+                    UserData.Users
+                );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.ToString());
+            }
+        }
         public static class UserData
         {
             public static List<UserDto> Users = new List<UserDto>
@@ -115,5 +135,36 @@ namespace EncDecExampleLoginApi.Controllers
             public string UserName { get; set; }
             public string Password { get; set; }
         }
+
+        public class ValidationTokenActionFilter : IAsyncActionFilter
+        {
+            public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
+            {
+                var request = context.HttpContext.Request;
+                if (!request.Headers.TryGetValue("Authorization", out var accessToken))
+                {
+                    context.Result = new UnauthorizedObjectResult("Access token is missing.");
+                    return;
+                }
+
+                var _encDecService = context.HttpContext.RequestServices.GetRequiredService<EncDecService>();
+
+                var json = _encDecService.Decrypt(accessToken.ToString());
+                var user = JsonConvert.DeserializeObject<BlogLoginModel>(json);
+                if (user!.SessionExpired > DateTime.Now)
+                {
+                    context.Result = new UnauthorizedResult();
+                    return;
+                }
+                // Here you can add additional validation for the token if needed
+                await next();
+
+
+            }
+        }
+
     }
+
+
 }
+
