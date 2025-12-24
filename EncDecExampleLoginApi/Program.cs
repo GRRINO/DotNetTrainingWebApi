@@ -32,6 +32,7 @@ namespace EncDecExampleLoginApi
 
             app.UseHttpsRedirection();
 
+            app.UseValidateTokenMiddleware();
             app.UseAuthorization();
 
 

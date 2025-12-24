@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
+using static EncDecExampleLoginApi.Controllers.BlogController;
 
 namespace EncDecExampleLoginApi.Controllers
 {
@@ -39,7 +40,7 @@ namespace EncDecExampleLoginApi.Controllers
 
                 var json = JsonConvert.SerializeObject(user);
 
-               var token = _encDecService.Encrypt(json);
+                var token = _encDecService.Encrypt(json);
 
                 var model = new BlogLoginResponse
                 {
@@ -48,7 +49,8 @@ namespace EncDecExampleLoginApi.Controllers
                 return Ok(model);
 
             }
-            catch (Exception ex) { 
+            catch (Exception ex)
+            {
                 return StatusCode(500, ex.Message);
             }
         }
@@ -59,7 +61,7 @@ namespace EncDecExampleLoginApi.Controllers
             try
             {
                 var result = HttpContext.Request.Headers.TryGetValue("Authorization", out var accessToken);
-                if(!result)
+                if (!result)
                 {
                     return Unauthorized("Access token is missing.");
                 }
@@ -72,7 +74,8 @@ namespace EncDecExampleLoginApi.Controllers
                 return Ok(
                     UserData.Users
                 );
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.ToString());
             }
@@ -85,8 +88,8 @@ namespace EncDecExampleLoginApi.Controllers
         {
             try
             {
-               
-               
+
+
                 return Ok(
                     UserData.Users
                 );
@@ -109,7 +112,7 @@ namespace EncDecExampleLoginApi.Controllers
 
         public class UserListRequest
         {
-            public string ?AccessToken { get; set; }
+            public string? AccessToken { get; set; }
         }
 
         public class BlogLoginModel
@@ -163,8 +166,61 @@ namespace EncDecExampleLoginApi.Controllers
             }
         }
 
+        public class ValidationTokenMiddleware
+        {
+            private readonly RequestDelegate _next;
+            public ValidationTokenMiddleware(RequestDelegate next)
+            {
+                _next = next;
+            }
+            public async Task InvokeAsync(HttpContext context, EncDecService encDecService)
+            {
+                //if(context.Request.Path.ToString().ToLower() == ("/weatherforecast"))
+                //{
+                //    goto Result;
+                //}
+
+                string requestPath = context.Request.Path.ToString().ToLower();
+                if (AllowUrlList.Contains(requestPath))
+                {
+                    goto Result;
+                }
+
+                if (!context.Request.Headers.TryGetValue("Authorization", out var accessToken))
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsync("Access token is missing.");
+                    return;
+                }
+                var json = encDecService.Decrypt(accessToken.ToString());
+                var user = JsonConvert.DeserializeObject<BlogLoginModel>(json);
+                if (user!.SessionExpired > DateTime.Now)
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsync("Session is expired.");
+                    return;
+                }
+                // Here you can add additional validation for the token if needed
+                Result:
+                await _next(context);
+            }
+
+            private string[] AllowUrlList =
+            {
+                "/weatherforecast",
+                "/api/blog/login"
+            };
+        }
+
+       
     }
-
-
+    public static class ValidationTokenMiddlewareExtensions
+    {
+        public static IApplicationBuilder UseValidateTokenMiddleware(
+            this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<ValidationTokenMiddleware>();
+        }
+    }
 }
 
